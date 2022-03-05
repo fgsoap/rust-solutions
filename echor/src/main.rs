@@ -1,7 +1,7 @@
 use clap::{Arg, Command};
 fn main() {
     // println!("{:?}", std::env::args());
-    let matchs = Command::new("echor")
+    let matches = Command::new("echor")
         .version("0.1.0")
         .author("Node JX <fgsoap@gmail.com>")
         .about("Rust echo")
@@ -19,5 +19,7 @@ fn main() {
                 .takes_value(false),
         )
         .get_matches();
-    println!("{:#?}", matchs);
+    let text = matches.values_of("text").unwrap().collect::<Vec<&str>>();
+    let omit_newline = matches.is_present("omit_newline");
+    print!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
 }
