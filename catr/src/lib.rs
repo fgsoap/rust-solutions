@@ -13,7 +13,7 @@ pub struct Config {
 type MyResult<T> = Result<T, Box<dyn Error>>;
 
 pub fn run(config: Config) -> MyResult<()> {
-    // println!("Hello, world!");
+    println!("Hello, world!");
     dbg!(config);
     Ok(())
 }
@@ -25,7 +25,8 @@ pub fn get_args() -> MyResult<Config> {
         .about("Rust cat")
         .arg(
             Arg::new("files")
-                .value_name("FILES")
+                .allow_invalid_utf8(true)
+                .value_name("FILE")
                 .help("Input files")
                 .multiple_values(true)
                 .default_value("-"),
