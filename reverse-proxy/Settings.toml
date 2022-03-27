@@ -1,1 +1,2 @@
-upstream = "https://reqbin.com/"
+upstream_echo = "https://reqbin.com/"
+upstream_hello = "https://enak80j25b8w.x.pipedream.net"

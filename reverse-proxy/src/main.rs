@@ -5,7 +5,6 @@ use sloggers::Build;
 use std::collections::HashMap;
 
 use config::Config;
-use serde_json;
 use warp::{http::HeaderValue, hyper::HeaderMap, Filter};
 use warp_reverse_proxy::reverse_proxy_filter;
 
@@ -28,7 +27,8 @@ async fn main() {
     let s = settings
         .try_deserialize::<HashMap<String, String>>()
         .unwrap();
-    let upstream = s.get("upstream").unwrap();
+    let upstream_echo = s.get("upstream_echo").unwrap();
+    let upstream_hello = s.get("upstream_hello").unwrap();
 
     let log = warp::log::custom(move |info| {
         log_info!(
@@ -49,14 +49,23 @@ async fn main() {
     });
 
     // Forward request to localhost in other port
-    let app = warp::path!("echo" / ..).and(
-        reverse_proxy_filter("".to_string(), upstream.to_string())
-            // .and_then(log_response)
-            .with(log),
-    );
+    let app_echo = warp::path!("echo" / ..).and(reverse_proxy_filter(
+        "".to_string(),
+        upstream_echo.to_string(),
+    ));
+
+    let app_hello = warp::path!("hello" / ..).and(reverse_proxy_filter(
+        "".to_string(),
+        upstream_hello.to_string(),
+    ));
+
+    let routes = warp::get()
+        .and(app_echo.or(app_hello))
+        // .and_then(log_response)
+        .with(log);
 
     // spawn proxy server
-    warp::serve(app).run(([0, 0, 0, 0], 3030)).await;
+    warp::serve(routes).run(([0, 0, 0, 0], 3030)).await;
 }
 
 // async fn log_response(response: http::Response<Bytes>) -> Result<impl Reply, Rejection> {
