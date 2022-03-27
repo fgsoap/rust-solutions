@@ -10,3 +10,4 @@ warp = "0.3"
 warp-reverse-proxy = "0.5"
 tokio = { version = "1", features = ["full"] }
 chrono = { version = "0.4.4", features = ["serde"] }
+serde_json = { version = "^1.0"}

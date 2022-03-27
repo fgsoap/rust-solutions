@@ -1,5 +1,6 @@
 use chrono::Utc;
-use warp::Filter;
+use serde_json;
+use warp::{http::HeaderValue, hyper::HeaderMap, Filter};
 use warp_reverse_proxy::reverse_proxy_filter;
 
 #[tokio::main]
@@ -7,15 +8,19 @@ async fn main() {
     let log = warp::log::custom(|info| {
         // Use a log macro, or slog, or println, or whatever!
         eprintln!(
-            "{} {} {} {} {} {} {} {:?}",
+            "{} {} {} {} {} {} {:?} {} {:?} {}",
             Utc::now(),
             info.host().unwrap(),
             info.remote_addr().unwrap(),
             info.user_agent().unwrap(),
             info.method(),
             info.path(),
+            info.version(),
             info.status(),
             info.request_headers(),
+            format!("{}", convert(info.request_headers()))
+                .into_bytes()
+                .len()
         );
     });
 
@@ -34,3 +39,7 @@ async fn main() {
 //     println!("{:?}", response);
 //     Ok(response)
 // }
+
+fn convert(headers: &HeaderMap<HeaderValue>) -> serde_json::Value {
+    format!("{:?}", headers).into()
+}
