@@ -14,7 +14,6 @@ async fn main() {
     builder.level(Severity::Debug);
 
     let logger = builder.build().unwrap();
-    log_info!(logger, "Hello World!");
 
     let settings = Config::builder()
         .add_source(config::File::with_name("Settings.toml").required(true))
