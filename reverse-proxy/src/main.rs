@@ -48,19 +48,23 @@ async fn main() {
     });
 
     // Forward request to localhost in other port
-    let app_echo = warp::path!("echo" / ..).and(reverse_proxy_filter(
+    let echo = warp::path!("echo" / ..).and(reverse_proxy_filter(
         "".to_string(),
         upstream_echo.to_string(),
     ));
 
-    let app_hello = warp::path!("hello" / ..).and(reverse_proxy_filter(
+    let hello = warp::path!("hello" / ..).and(reverse_proxy_filter(
         "".to_string(),
         upstream_hello.to_string(),
     ));
 
-    let routes = warp::get()
-        .and(app_echo.or(app_hello))
-        // .and_then(log_response)
+    let echo_get_route = warp::get().and(echo.clone());
+    // .and_then(log_response)
+    let echo_post_route = warp::post().and(echo);
+    let hello_get_route = warp::get().and(hello);
+    let routes = echo_get_route
+        .or(echo_post_route)
+        .or(hello_get_route)
         .with(log);
 
     // spawn proxy server
