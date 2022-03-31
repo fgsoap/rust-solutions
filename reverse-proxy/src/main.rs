@@ -5,7 +5,12 @@ use sloggers::Build;
 use std::collections::HashMap;
 
 use config::Config;
-use warp::{http::HeaderValue, hyper::HeaderMap, Filter};
+use warp::{
+    http::HeaderValue,
+    hyper::HeaderMap,
+    hyper::{self, body::Bytes},
+    Filter, Rejection, Reply,
+};
 use warp_reverse_proxy::reverse_proxy_filter;
 
 #[tokio::main]
@@ -48,18 +53,15 @@ async fn main() {
     });
 
     // Forward request to localhost in other port
-    let echo = warp::path!("echo" / ..).and(reverse_proxy_filter(
-        "".to_string(),
-        upstream_echo.to_string(),
-    ));
+    let echo = warp::path!("echo" / ..).and(
+        reverse_proxy_filter("".to_string(), upstream_echo.to_string()).and_then(log_response),
+    );
 
-    let hello = warp::path!("hello" / ..).and(reverse_proxy_filter(
-        "".to_string(),
-        upstream_hello.to_string(),
-    ));
+    let hello = warp::path!("hello" / ..).and(
+        reverse_proxy_filter("".to_string(), upstream_hello.to_string()).and_then(log_response),
+    );
 
     let echo_get_route = warp::get().and(echo.clone());
-    // .and_then(log_response)
     let echo_post_route = warp::post().and(echo);
     let hello_get_route = warp::get().and(hello);
     let routes = echo_get_route
@@ -71,10 +73,10 @@ async fn main() {
     warp::serve(routes).run(([0, 0, 0, 0], 3030)).await;
 }
 
-// async fn log_response(response: http::Response<Bytes>) -> Result<impl Reply, Rejection> {
-//     println!("{:?}", response);
-//     Ok(response)
-// }
+async fn log_response(response: hyper::http::Response<Bytes>) -> Result<impl Reply, Rejection> {
+    println!("{:?}", response);
+    Ok(response)
+}
 
 fn convert(headers: &HeaderMap<HeaderValue>) -> serde_json::Value {
     format!("{:?}", headers).into()
