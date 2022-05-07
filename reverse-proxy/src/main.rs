@@ -1,10 +1,7 @@
-use slog::info as log_info;
-use sloggers::file::FileLoggerBuilder;
-use sloggers::types::Severity;
-use sloggers::Build;
 use std::collections::HashMap;
 
 use config::Config;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use warp::{
     http::HeaderValue,
     hyper::HeaderMap,
@@ -15,10 +12,12 @@ use warp_reverse_proxy::reverse_proxy_filter;
 
 #[tokio::main]
 async fn main() {
-    let mut builder = FileLoggerBuilder::new("reverse-proxy.log");
-    builder.level(Severity::Debug);
-
-    let logger = builder.build().unwrap();
+    tracing_subscriber::registry()
+        .with(tracing_subscriber::EnvFilter::new(
+            std::env::var("RUST_LOG").unwrap_or_else(|_| "reverse_proxy=trace".into()),
+        ))
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
     let settings = Config::builder()
         .add_source(config::File::with_name("Settings.toml").required(true))
@@ -35,8 +34,7 @@ async fn main() {
     let upstream_hello = s.get("upstream_hello").unwrap();
 
     let log = warp::log::custom(move |info| {
-        log_info!(
-            logger,
+        tracing::debug!(
             "{} {} {} {} {} {:?} {} {:?} {}",
             info.host().unwrap(),
             info.remote_addr().unwrap(),
@@ -74,7 +72,7 @@ async fn main() {
 }
 
 async fn log_response(response: hyper::http::Response<Bytes>) -> Result<impl Reply, Rejection> {
-    println!("{:?}", response);
+    tracing::debug!("{:?}", response);
     Ok(response)
 }
 

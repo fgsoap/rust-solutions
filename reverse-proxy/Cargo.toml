@@ -10,6 +10,6 @@ warp = "0.3"
 warp-reverse-proxy = "0.5"
 tokio = { version = "1", features = ["full"] }
 serde_json = { version = "^1.0"}
-config = "0.12"
-sloggers = "2.1"
-slog = "2.7"
+config = "0.13.1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
