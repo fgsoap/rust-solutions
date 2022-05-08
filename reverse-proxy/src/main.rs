@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
 use config::Config;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_appender::{non_blocking, rolling};
+use tracing_subscriber::{fmt, layer::SubscriberExt, registry, util::SubscriberInitExt, EnvFilter};
 use warp::{
     http::HeaderValue,
     hyper::HeaderMap,
@@ -12,11 +13,17 @@ use warp_reverse_proxy::reverse_proxy_filter;
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::new(
+    let file_appender = rolling::daily("logs", "reverse-proxy.log");
+    let (non_blocking_appender, _guard) = non_blocking(file_appender);
+    let file_layer = fmt::layer()
+        .with_ansi(false)
+        .with_writer(non_blocking_appender);
+
+    registry()
+        .with(EnvFilter::new(
             std::env::var("RUST_LOG").unwrap_or_else(|_| "reverse_proxy=trace".into()),
         ))
-        .with(tracing_subscriber::fmt::layer())
+        .with(file_layer)
         .init();
 
     let settings = Config::builder()
