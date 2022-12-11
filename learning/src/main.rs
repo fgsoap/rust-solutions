@@ -144,6 +144,12 @@ fn main() {
         }
     }
 
+    impl Draw for String {
+        fn draw(&self) {
+            println!("{:?} {:?}", self.len(), self.bytes())
+        }
+    }
+
     pub struct Screen {
         pub components: Vec<Box<dyn Draw>>,
     }
@@ -172,6 +178,7 @@ fn main() {
                 height: 10,
                 label: String::from("OK"),
             }),
+            Box::new(String::from("Hello World!")),
         ],
     };
 
