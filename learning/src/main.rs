@@ -116,71 +116,89 @@ fn main() {
     //     println!("{:?}", o);
     // }
 
-    pub trait Draw {
-        fn draw(&self);
+    // pub trait Draw {
+    //     fn draw(&self);
+    // }
+
+    // pub struct Button {
+    //     pub width: u32,
+    //     pub height: u32,
+    //     pub label: String,
+    // }
+
+    // impl Draw for Button {
+    //     fn draw(&self) {
+    //         println!("{:?} {:?} {:?}", self.width, self.height, self.label)
+    //     }
+    // }
+
+    // struct SelectBox {
+    //     width: u32,
+    //     height: u32,
+    //     options: Vec<String>,
+    // }
+
+    // impl Draw for SelectBox {
+    //     fn draw(&self) {
+    //         println!("{:?} {:?} {:?}", self.width, self.height, self.options)
+    //     }
+    // }
+
+    // impl Draw for String {
+    //     fn draw(&self) {
+    //         println!("{:?} {:?}", self.len(), self.bytes())
+    //     }
+    // }
+
+    // pub struct Screen {
+    //     pub components: Vec<Box<dyn Draw>>,
+    // }
+
+    // impl Screen {
+    //     pub fn run(&self) {
+    //         for component in self.components.iter() {
+    //             component.draw();
+    //         }
+    //     }
+    // }
+
+    // let screen = Screen {
+    //     components: vec![
+    //         Box::new(SelectBox {
+    //             width: 75,
+    //             height: 10,
+    //             options: vec![
+    //                 String::from("Yes"),
+    //                 String::from("Maybe"),
+    //                 String::from("No"),
+    //             ],
+    //         }),
+    //         Box::new(Button {
+    //             width: 50,
+    //             height: 10,
+    //             label: String::from("OK"),
+    //         }),
+    //         Box::new(String::from("Hello World!")),
+    //     ],
+    // };
+
+    // screen.run();
+
+    let mut v = vec![1, 2];
+    v.push(3);
+    println!("{:?}", v);
+
+    let _third = &v[2];
+    // match v.get(2) {
+    //     Some(third) => println!("{}", third),
+    //     None => println!("None!"),
+    // }
+    v.push(56);
+
+    for i in &mut v {
+        *i += 10
     }
-
-    pub struct Button {
-        pub width: u32,
-        pub height: u32,
-        pub label: String,
+    for i in &v {
+        println!("{:?}", i);
     }
-
-    impl Draw for Button {
-        fn draw(&self) {
-            println!("{:?} {:?} {:?}", self.width, self.height, self.label)
-        }
-    }
-
-    struct SelectBox {
-        width: u32,
-        height: u32,
-        options: Vec<String>,
-    }
-
-    impl Draw for SelectBox {
-        fn draw(&self) {
-            println!("{:?} {:?} {:?}", self.width, self.height, self.options)
-        }
-    }
-
-    impl Draw for String {
-        fn draw(&self) {
-            println!("{:?} {:?}", self.len(), self.bytes())
-        }
-    }
-
-    pub struct Screen {
-        pub components: Vec<Box<dyn Draw>>,
-    }
-
-    impl Screen {
-        pub fn run(&self) {
-            for component in self.components.iter() {
-                component.draw();
-            }
-        }
-    }
-
-    let screen = Screen {
-        components: vec![
-            Box::new(SelectBox {
-                width: 75,
-                height: 10,
-                options: vec![
-                    String::from("Yes"),
-                    String::from("Maybe"),
-                    String::from("No"),
-                ],
-            }),
-            Box::new(Button {
-                width: 50,
-                height: 10,
-                label: String::from("OK"),
-            }),
-            Box::new(String::from("Hello World!")),
-        ],
-    };
-
-    screen.run();
 }
