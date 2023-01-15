@@ -1,6 +1,7 @@
 // use ndarray::array;
 // use std::collections::VecDeque;
 // use std::{collections::BinaryHeap, path::Component};
+#[allow(unused_imports)]
 
 fn main() {
     // let mut array: [i32; 4] = [1, 2, 3, 4];
@@ -184,21 +185,107 @@ fn main() {
 
     // screen.run();
 
-    let mut v = vec![1, 2];
-    v.push(3);
-    println!("{:?}", v);
+    // let mut v = vec![1, 2];
+    // v.push(3);
+    // println!("{:?}", v);
 
-    let _third = &v[2];
-    // match v.get(2) {
-    //     Some(third) => println!("{}", third),
-    //     None => println!("None!"),
+    // let _third = &v[2];
+    // // match v.get(2) {
+    // //     Some(third) => println!("{}", third),
+    // //     None => println!("None!"),
+    // // }
+    // v.push(56);
+
+    // for i in &mut v {
+    //     *i += 10
     // }
-    v.push(56);
+    // for i in &v {
+    //     println!("{:?}", i);
+    // }
 
-    for i in &mut v {
-        *i += 10
+    // // HashMap
+    // use std::collections::HashMap;
+    // let mut scores = HashMap::new();
+    // scores.insert("Blue", 10);
+
+    // let old = scores.insert("Blue", 20);
+    // // println!("old: {:?}, scores: {:?}", old, scores);
+    // assert_eq!(old, Some(10));
+
+    // let new = scores.get("Blue");
+    // assert_eq!(new, Some(&20));
+
+    // let v = scores.entry("Yellow").or_insert(5);
+    // assert_eq!(v, &5);
+
+    // let v = scores.entry("Yellow").or_insert(50);
+    // assert_eq!(*v, 5);
+
+    // let text = "hello world wonderful world";
+    // let mut map = HashMap::new();
+    // for word in text.split_whitespace() {
+    //     let count = map.entry(word).or_insert(0);
+    //     *count += 1;
+    // }
+    // println!("{:?}", &map)
+
+    // let a = 3.1_f32 as i8;
+    // let b = 100_i8 as i32;
+    // let c = 'a' as i16;
+
+    // println!("{},{},{}", a, b, c)
+
+    // let mut values: [i32; 2] = [1, 2];
+    // let p1: *mut i32 = values.as_mut_ptr();
+    // println!("{:?}", p1);
+    // let first_address = p1 as usize; // 将p1内存地址转换为一个整数
+    // println!("{:?}", first_address);
+    // let second_address = first_address + 4; // 4 == std::mem::size_of::<i32>()，i32类型占用4个字节，因此将内存地址 + 4
+    // println!("{:?}", second_address);
+    // let p2 = second_address as *mut i32; // 访问该地址指向的下一个整数p2
+    // unsafe {
+    //     *p2 += 1;
+    // }
+    // assert_eq!(values[1], 3);
+
+    // use std::convert::TryInto;
+
+    // let a: u8 = 10;
+    // let b: u16 = 256;
+
+    // let b_: u8 = match b.try_into() {
+    //     Ok(b1) => b1,
+    //     Err(e) => {
+    //         println!("{:?}", e.to_string());
+    //         0
+    //     }
+    // };
+    // println!("a: {}, b_: {}, u8::Max: {}", a, b_, u8::MAX);
+
+    // if a < b_ {
+    //     println!("a is less than b_.")
+    // }
+
+    struct T1 {
+        x: u32,
+        y: u16,
     }
-    for i in &v {
-        println!("{:?}", i);
+
+    #[allow(dead_code)]
+    #[derive(Debug)]
+    struct T2 {
+        a: u32,
+        b: u16,
     }
+
+    fn reinterpret(t1: T1) -> T2 {
+        let T1 { x, y } = t1;
+        T2 { a: x, b: y }
+    }
+
+    let a = T1 { x: 12, y: 13 };
+
+    let b = reinterpret(a);
+
+    println!("{:?}", b);
 }
