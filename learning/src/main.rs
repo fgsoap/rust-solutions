@@ -266,26 +266,27 @@ fn main() {
     //     println!("a is less than b_.")
     // }
 
-    struct T1 {
-        x: u32,
-        y: u16,
-    }
+    // struct T1 {
+    //     x: u32,
+    //     y: u16,
+    // }
 
-    #[allow(dead_code)]
-    #[derive(Debug)]
-    struct T2 {
-        a: u32,
-        b: u16,
-    }
+    // #[allow(dead_code)]
+    // #[derive(Debug)]
+    // struct T2 {
+    //     a: u32,
+    //     b: u16,
+    // }
 
-    fn reinterpret(t1: T1) -> T2 {
-        let T1 { x, y } = t1;
-        T2 { a: x, b: y }
-    }
+    // fn reinterpret(t1: T1) -> T2 {
+    //     let (x, y) = (t1.x, t1.y);
+    //     // let T1 { x, y } = t1;
+    //     T2 { a: x, b: y }
+    // }
 
-    let a = T1 { x: 12, y: 13 };
+    // let a = T1 { x: 12, y: 13 };
 
-    let b = reinterpret(a);
+    // let b = reinterpret(a);
 
-    println!("{:?}", b);
+    // println!("{:?}", b);
 }
