@@ -1,3 +1,5 @@
+// use std::rc::Rc;
+
 // use ndarray::array;
 // use std::collections::VecDeque;
 // use std::{collections::BinaryHeap, path::Component};
@@ -237,11 +239,11 @@ fn main() {
 
     // let mut values: [i32; 2] = [1, 2];
     // let p1: *mut i32 = values.as_mut_ptr();
-    // println!("{:?}", p1);
+    // println!("p1: {:?}", p1);
     // let first_address = p1 as usize; // 将p1内存地址转换为一个整数
-    // println!("{:?}", first_address);
+    // println!("first_adress: {:?}", first_address);
     // let second_address = first_address + 4; // 4 == std::mem::size_of::<i32>()，i32类型占用4个字节，因此将内存地址 + 4
-    // println!("{:?}", second_address);
+    // println!("second_address: {:?}", second_address);
     // let p2 = second_address as *mut i32; // 访问该地址指向的下一个整数p2
     // unsafe {
     //     *p2 += 1;
@@ -289,4 +291,19 @@ fn main() {
     // let b = reinterpret(a);
 
     // println!("{:?}", b);
+
+    // trait Trait {}
+    // fn foo<X: Trait + std::fmt::Debug>(t: X) {
+    //     println!("{:?}", t)
+    // }
+    // impl Trait for i32 {}
+
+    // let t = 12;
+    // foo(t);
+
+    // let array: Rc<Box<[T; 3]>> = ...;
+    // let first_entry = array[0];
+
+    panic!("crash and burn");
+
 }
