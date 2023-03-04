@@ -1,5 +1,9 @@
 // use std::rc::Rc;
 
+use std::fs::File;
+
+use std::io::ErrorKind;
+
 // use ndarray::array;
 // use std::collections::VecDeque;
 // use std::{collections::BinaryHeap, path::Component};
@@ -304,6 +308,17 @@ fn main() {
     // let array: Rc<Box<[T; 3]>> = ...;
     // let first_entry = array[0];
 
-    panic!("crash and burn");
+    // panic!("crash and burn");
 
+    let f = File::open("hello.txt");
+    let _f = match f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {:?}", e),
+            },
+            other_error => panic!("Problem opening the file: {:?}", other_error),
+        },
+    };
 }
